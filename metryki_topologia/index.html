@@ -686,7 +686,7 @@ Funkcja ta musi spełniać trzy warunki (aksjomaty metryki) dla wszystkich <span
     $$ d(x, z) \le d(x, y) + d(y, z) $$</p>
 </li>
 </ol>
-<hr />
+<hr/>
 <h2 id="2-przykady-metryk-w-przestrzeni-mathbbrn">2. Przykłady Metryk w Przestrzeni <span class="arithmatex">\(\mathbb{R}^n\)</span></h2>
 <p>Dla punktów <span class="arithmatex">\(x = (x_1, \dots, x_n)\)</span> i <span class="arithmatex">\(y = (y_1, \dots, y_n)\)</span> w <span class="arithmatex">\(\mathbb{R}^n\)</span> można zdefiniować wiele różnych metryk.</p>
 <h4 id="metryka-euklidesowa-d_2">Metryka Euklidesowa (<span class="arithmatex">\(d_2\)</span>)</h4>
@@ -699,7 +699,7 @@ $$ d_1(x, y) = \sum_{i=1}^n |x_i - y_i| $$</p>
 <p>Największa z odległości wzdłuż którejkolwiek z osi.
 $$ d_\infty(x, y) = \max_{i=1,\dots,n} |x_i - y_i| $$</p>
 <p><strong>Ważna uwaga:</strong> Chociaż te metryki liczą odległość w różny sposób, wszystkie generują tę samą <strong>topologię</strong> na <span class="arithmatex">\(\mathbb{R}^n\)</span>. Oznacza to, że pojęcia takie jak zbieżność ciągów czy otwartość zbiorów są dla nich równoważne.</p>
-<hr />
+<hr/>
 <h2 id="3-inne-przykady-metryk">3. Inne Przykłady Metryk</h2>
 <h4 id="metryka-dyskretna">Metryka Dyskretna</h4>
 <p>Można ją zdefiniować na dowolnym zbiorze <span class="arithmatex">\(X\)</span>. Jest to najprostszy, choć często "patologiczny" przykład metryki.
@@ -711,32 +711,28 @@ $$ d(x, y) = \begin{cases}
 $$ B(x_0, r) = { x \in X \mid d(x_0, x) &lt; r } $$
 Zbiór <span class="arithmatex">\(U \subseteq X\)</span> nazywamy <strong>otwartym</strong>, jeśli dla każdego punktu <span class="arithmatex">\(x \in U\)</span> istnieje pewna kula otwarta o środku w <span class="arithmatex">\(x\)</span>, która w całości zawiera się w <span class="arithmatex">\(U\)</span>.
 Rodzina wszystkich zbiorów otwartych w <span class="arithmatex">\((X, d)\)</span> tworzy <strong>topologię</strong> indukowaną przez metrykę <span class="arithmatex">\(d\)</span>.</p>
-<hr />
+<hr/>
 <h2 id="5-wizualizacja-kul-jednostkowych-w-mathbbr2">5. Wizualizacja Kul Jednostkowych w <span class="arithmatex">\(\mathbb{R}^2\)</span></h2>
 <p>Poniższa grafika przedstawia, jak wyglądają kule jednostkowe (zbiory punktów {x \in \mathbb{R}^2 : d(0, x) = 1}) w różnych metrykach na płaszczyźnie.</p>
 <div style="text-align: center;">
-<svg width="300" height="300" viewBox="-1.5 -1.5 3 3" xmlns="http://www.w3.org/2000/svg">
-  <g transform="scale(1,-1)">
-    <!-- Axes -->
-    <line x1="-1.5" y1="0" x2="1.5" y2="0" stroke="black" stroke-width="0.02"/>
-    <line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="black" stroke-width="0.02"/>
-
-    <!-- d_2: Euclidean metric (circle) -->
-    <circle cx="0" cy="0" r="1" fill="none" stroke="blue" stroke-width="0.05"/>
-
-    <!-- d_1: Manhattan metric (diamond) -->
-    <polygon points="1,0 0,1 -1,0 0,-1" fill="none" stroke="red" stroke-width="0.05"/>
-
-    <!-- d_inf: Maximum metric (square) -->
-    <rect x="-1" y="-1" width="2" height="2" fill="none" stroke="green" stroke-width="0.05"/>
-
-    <!-- Labels -->
-    <g style="font-family: sans-serif; font-size: 0.15px;" transform="scale(1,-1)">
-      <text x="0.75" y="-0.75" fill="blue">d₂</text>
-      <text x="0.4" y="-0.4" fill="red">d₁</text>
-      <text x="1.05" y="-1.05" fill="green">d ∞</text>
-    </g>
-  </g>
+<svg height="300" viewbox="-1.5 -1.5 3 3" width="300" xmlns="http://www.w3.org/2000/svg">
+<g transform="scale(1,-1)">
+<!-- Axes -->
+<line stroke="black" stroke-width="0.02" x1="-1.5" x2="1.5" y1="0" y2="0"></line>
+<line stroke="black" stroke-width="0.02" x1="0" x2="0" y1="-1.5" y2="1.5"></line>
+<!-- d_2: Euclidean metric (circle) -->
+<circle cx="0" cy="0" fill="none" r="1" stroke="blue" stroke-width="0.05"></circle>
+<!-- d_1: Manhattan metric (diamond) -->
+<polygon fill="none" points="1,0 0,1 -1,0 0,-1" stroke="red" stroke-width="0.05"></polygon>
+<!-- d_inf: Maximum metric (square) -->
+<rect fill="none" height="2" stroke="green" stroke-width="0.05" width="2" x="-1" y="-1"></rect>
+<!-- Labels -->
+<g style="font-family: sans-serif; font-size: 0.15px;" transform="scale(1,-1)">
+<text fill="blue" x="0.75" y="-0.75">d₂</text>
+<text fill="red" x="0.4" y="-0.4">d₁</text>
+<text fill="green" x="1.05" y="-1.05">d ∞</text>
+</g>
+</g>
 </svg>
 </div>
 

@@ -6,6 +6,7 @@ nav:
   - 'Matematyka': 'matematyka.md'
   - 'Teoria Grup': 'teoria_grup.md'
   - 'Rzut ukośny': 'rzut_ukosny.md'
+  - 'Topologia i Metryki': 'metryki_topologia.md'
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true

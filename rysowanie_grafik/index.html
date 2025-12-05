@@ -416,6 +416,101 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#2-wbudowane-grafiki-svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Wbudowane Grafiki SVG
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Wbudowane Grafiki SVG">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-prosta-parabola" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Prosta parabola
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-diagramy-za-pomoca-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Diagramy za pomocą Mermaid
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Diagramy za pomocą Mermaid">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-wykres-koowy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Wykres kołowy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#przykad-wykres-xy-eksperymentalny" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Wykres XY (eksperymentalny)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-zaawansowane-wizualizacje-latex-i-tikz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Zaawansowane Wizualizacje: LaTeX i TikZ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Zaawansowane Wizualizacje: LaTeX i TikZ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-rysunek-w-tikz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Rysunek w TikZ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -478,6 +573,101 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#2-wbudowane-grafiki-svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Wbudowane Grafiki SVG
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Wbudowane Grafiki SVG">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-prosta-parabola" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Prosta parabola
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-diagramy-za-pomoca-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Diagramy za pomocą Mermaid
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Diagramy za pomocą Mermaid">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-wykres-koowy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Wykres kołowy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#przykad-wykres-xy-eksperymentalny" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Wykres XY (eksperymentalny)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-zaawansowane-wizualizacje-latex-i-tikz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Zaawansowane Wizualizacje: LaTeX i TikZ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Zaawansowane Wizualizacje: LaTeX i TikZ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#przykad-rysunek-w-tikz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Przykład: Rysunek w TikZ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -505,28 +695,30 @@
 <li>
 <p><strong>Wygeneruj wykres:</strong> Użyj dowolnego narzędzia, które potrafi eksportować grafikę. Dla celów matematycznych, biblioteki Pythona takie jak <strong>Matplotlib</strong> lub <strong>Plotly</strong> są doskonałym wyborem.</p>
 <p><em>Przykład w Pythonie (Matplotlib):</em>
-```python
-import matplotlib.pyplot as plt
-import numpy as np</p>
-<p>x = np.linspace(0, 2 * np.pi, 400)
-y = np.sin(x**2)</p>
-<p>plt.figure()
-plt.plot(x, y)
-plt.title("Wykres funkcji sin(x^2)")
-plt.xlabel("x")
-plt.ylabel("y")
-plt.grid(True)</p>
-<h1 id="zapisz-wykres-do-pliku-w-katalogu-docsassets">Zapisz wykres do pliku w katalogu docs/assets</h1>
-<p>plt.savefig("docs/assets/wykres_sin_x2.png")
-```</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Wykres funkcji sin(x^2)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Zapisz wykres do pliku w katalogu docs/assets</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;docs/assets/wykres_sin_x2.png&quot;</span><span class="p">)</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Umieść plik w projekcie:</strong> Zapisz wygenerowany plik (np. <code>wykres_sin_x2.png</code>) w odpowiednim miejscu w swoim projekcie, na przykład w katalogu <code>docs/assets/</code>.</p>
 </li>
 <li>
 <p><strong>Wstaw obrazek w Markdown:</strong> Użyj standardowej składni Markdown, aby wstawić obrazek na stronę.</p>
-<p><code>markdown
-![Wykres funkcji sin(x^2)](assets/wykres_sin_x2.png)</code></p>
+<div class="highlight"><pre><span></span><code>![<span class="nt">Wykres funkcji sin(x^2)</span>](<span class="na">assets/wykres_sin_x2.png</span>)
+</code></pre></div>
 </li>
 </ol>
 <hr />
@@ -534,20 +726,20 @@ plt.grid(True)</p>
 <p>Możesz osadzać kod SVG bezpośrednio w pliku Markdown. Daje to dużą kontrolę nad wyglądem i pozwala na tworzenie prostych, skalowalnych grafik bez dodatkowych plików. Widziałeś już ten mechanizm w pliku <code>metryki_topologia.md</code>.</p>
 <h3 id="przykad-prosta-parabola">Przykład: Prosta parabola</h3>
 <p>Poniższy kod SVG rysuje wykres funkcji <span class="arithmatex">\(y = x^2\)</span>.</p>
-<pre><code class="language-html">&lt;div style=&quot;text-align: center;&quot;&gt;
-&lt;svg width=&quot;200&quot; height=&quot;200&quot; viewBox=&quot;-2 -1 4 4&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
-  &lt;g transform=&quot;scale(1,-1) translate(0, -1.5)&quot;&gt;
-    &lt;!-- Osie --&gt;
-    &lt;line x1=&quot;-2&quot; y1=&quot;0&quot; x2=&quot;2&quot; y2=&quot;0&quot; stroke=&quot;black&quot; stroke-width=&quot;0.05&quot;/&gt;
-    &lt;line x1=&quot;0&quot; y1=&quot;-0.5&quot; x2=&quot;0&quot; y2=&quot;2&quot; stroke=&quot;black&quot; stroke-width=&quot;0.05&quot;/&gt;
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center;&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">svg</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200&quot;</span> <span class="na">viewBox</span><span class="o">=</span><span class="s">&quot;-2 -1 4 4&quot;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&quot;http://www.w3.org/2000/svg&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">g</span> <span class="na">transform</span><span class="o">=</span><span class="s">&quot;scale(1,-1) translate(0, -1.5)&quot;</span><span class="p">&gt;</span>
+    <span class="cm">&lt;!-- Osie --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">line</span> <span class="na">x1</span><span class="o">=</span><span class="s">&quot;-2&quot;</span> <span class="na">y1</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">x2</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">y2</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">stroke</span><span class="o">=</span><span class="s">&quot;black&quot;</span> <span class="na">stroke-width</span><span class="o">=</span><span class="s">&quot;0.05&quot;</span><span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">line</span> <span class="na">x1</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">y1</span><span class="o">=</span><span class="s">&quot;-0.5&quot;</span> <span class="na">x2</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">y2</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">stroke</span><span class="o">=</span><span class="s">&quot;black&quot;</span> <span class="na">stroke-width</span><span class="o">=</span><span class="s">&quot;0.05&quot;</span><span class="p">/&gt;</span>
 
-    &lt;!-- Wykres paraboli y=x^2 --&gt;
-    &lt;polyline points=&quot;-1.5,2.25 -1,1 -0.5,0.25 0,0 0.5,0.25 1,1 1.5,2.25&quot; 
-              fill=&quot;none&quot; stroke=&quot;purple&quot; stroke-width=&quot;0.1&quot;/&gt;
-  &lt;/g&gt;
-&lt;/svg&gt;
-&lt;/div&gt;
-</code></pre>
+    <span class="cm">&lt;!-- Wykres paraboli y=x^2 --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">polyline</span> <span class="na">points</span><span class="o">=</span><span class="s">&quot;-1.5,2.25 -1,1 -0.5,0.25 0,0 0.5,0.25 1,1 1.5,2.25&quot;</span> 
+              <span class="na">fill</span><span class="o">=</span><span class="s">&quot;none&quot;</span> <span class="na">stroke</span><span class="o">=</span><span class="s">&quot;purple&quot;</span> <span class="na">stroke-width</span><span class="o">=</span><span class="s">&quot;0.1&quot;</span><span class="p">/&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">g</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
 <div style="text-align: center;">
 <svg width="200" height="200" viewBox="-2 -1 4 4" xmlns="http://www.w3.org/2000/svg">
   <g transform="scale(1,-1) translate(0, -1.5)">
@@ -566,37 +758,37 @@ plt.grid(True)</p>
 <h2 id="3-diagramy-za-pomoca-mermaid">3. Diagramy za pomocą Mermaid</h2>
 <p><strong>Mermaid</strong> to potężne narzędzie do tworzenia diagramów i wykresów z tekstu. Aby z niego korzystać, prawdopodobnie będziesz musiał aktywować odpowiednie rozszerzenie w pliku <code>mkdocs.yml</code> (np. <code>pymdownx.superfences</code>).</p>
 <h3 id="przykad-wykres-koowy">Przykład: Wykres kołowy</h3>
-<pre><code class="language-mermaid">pie
+<div class="highlight"><pre><span></span><code>pie
     title Podział ankietowanych
     &quot;Matematyka&quot; : 42
     &quot;Fizyka&quot; : 25
     &quot;Chemia&quot; : 15
     &quot;Inne&quot; : 8
-</code></pre>
+</code></pre></div>
 <h3 id="przykad-wykres-xy-eksperymentalny">Przykład: Wykres XY (eksperymentalny)</h3>
 <p>Mermaid oferuje również (wciąż w fazie rozwoju) możliwość tworzenia wykresów XY, co może być przydatne do wizualizacji danych matematycznych.</p>
-<pre><code class="language-mermaid">xychart-beta
+<div class="highlight"><pre><span></span><code>xychart-beta
     title &quot;Wykres funkcji&quot;
     x-axis [0, 1, 2, 3, 4, 5]
     y-axis &quot;Wartość&quot; [0, 10, 40, 20, 50, 30]
     line [10, 40, 20, 50, 30, 60]
     bar [5, 12, 15, 8, 22, 18]
-</code></pre>
+</code></pre></div>
 <hr />
 <h2 id="4-zaawansowane-wizualizacje-latex-i-tikz">4. Zaawansowane Wizualizacje: LaTeX i TikZ</h2>
 <p>Dla najwyższej jakości rysunków matematycznych, zwłaszcza w publikacjach naukowych, używa się pakietu <strong>TikZ</strong> dla LaTeX. Integracja z MkDocs jest bardziej skomplikowana i może wymagać specjalnych wtyczek (np. <code>mkdocs-tikz</code>), ale daje niemal nieograniczone możliwości.</p>
 <h3 id="przykad-rysunek-w-tikz">Przykład: Rysunek w TikZ</h3>
 <p>Poniższy kod (w składni LaTeX) rysuje prosty graf.</p>
-<pre><code class="language-latex">\begin{tikzpicture}
-    \node[draw, circle] (a) at (0,0) {A};
-    \node[draw, circle] (b) at (2,1) {B};
-    \node[draw, circle] (c) at (2,-1) {C};
+<div class="highlight"><pre><span></span><code><span class="k">\begin</span><span class="nb">{</span>tikzpicture<span class="nb">}</span>
+    <span class="k">\node</span><span class="na">[draw, circle]</span> (a) at (0,0) <span class="nb">{</span>A<span class="nb">}</span>;
+    <span class="k">\node</span><span class="na">[draw, circle]</span> (b) at (2,1) <span class="nb">{</span>B<span class="nb">}</span>;
+    <span class="k">\node</span><span class="na">[draw, circle]</span> (c) at (2,-1) <span class="nb">{</span>C<span class="nb">}</span>;
 
-    \draw[-&gt;] (a) -- (b);
-    \draw[-&gt;] (a) -- (c);
-    \draw[&lt;-&gt;, dashed] (b) -- (c);
-\end{tikzpicture}
-</code></pre>
+    <span class="k">\draw</span><span class="na">[-&gt;]</span> (a) -- (b);
+    <span class="k">\draw</span><span class="na">[-&gt;]</span> (a) -- (c);
+    <span class="k">\draw</span><span class="na">[&lt;-&gt;, dashed]</span> (b) -- (c);
+<span class="k">\end</span><span class="nb">{</span>tikzpicture<span class="nb">}</span>
+</code></pre></div>
 <p>Ta metoda jest najpotężniejsza, ale również wymaga największej wiedzy i odpowiedniej konfiguracji projektu.</p>
 
 
@@ -647,7 +839,7 @@ plt.grid(True)</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["mermaid"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>

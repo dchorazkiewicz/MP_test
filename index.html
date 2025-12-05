@@ -558,31 +558,31 @@
 </li>
 <li>
 <p><strong>Stwórz wirtualne środowisko:</strong> Aby odizolować zależności projektu, stwórz wirtualne środowisko dla Pythona.</p>
-<p><code>bash
-python -m venv .venv</code></p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+</code></pre></div>
 </li>
 <li>
 <p><strong>Aktywuj środowisko:</strong></p>
 <ul>
 <li>Na systemach Linux/macOS:
-    <code>bash
-    source .venv/bin/activate</code></li>
+    <div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</code></pre></div></li>
 <li>Na systemie Windows (w terminalu Command Prompt lub PowerShell):
-    <code>bash
-    .venv\Scripts\activate</code>
+    <div class="highlight"><pre><span></span><code>.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+</code></pre></div>
 Po aktywacji, nazwa Twojego środowiska <code>(.venv)</code> powinna pojawić się na początku linii w terminalu.</li>
 </ul>
 </li>
 </ol>
 <h2 id="krok-2-instalacja-mkdocs">Krok 2: Instalacja MkDocs</h2>
 <p>Z aktywnym środowiskiem, zainstaluj MkDocs. Dobrą praktyką jest również instalacja popularnego motywu <code>material</code>.</p>
-<pre><code class="language-bash">pip install mkdocs mkdocs-material
-</code></pre>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>mkdocs<span class="w"> </span>mkdocs-material
+</code></pre></div>
 <h2 id="krok-3-inicjalizacja-projektu-i-tworzenie-tresci">Krok 3: Inicjalizacja projektu i tworzenie treści</h2>
 <p>Jeśli zaczynasz od zera, możesz stworzyć nowy projekt:</p>
-<pre><code class="language-bash"># Stwórz projekt w bieżącym katalogu
-mkdocs new .
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="c1"># Stwórz projekt w bieżącym katalogu</span>
+mkdocs<span class="w"> </span>new<span class="w"> </span>.
+</code></pre></div>
 <p>Teraz możesz edytować plik <code>mkdocs.yml</code> oraz dodawać lub modyfikować pliki <code>.md</code> w katalogu <code>docs/</code>.</p>
 <h2 id="krok-4-publikacja-na-github-pages">Krok 4: Publikacja na GitHub Pages</h2>
 <p>To najważniejszy krok. MkDocs posiada wbudowane narzędzie, które automatyzuje cały proces.</p>
@@ -597,8 +597,8 @@ mkdocs new .
 </li>
 <li>
 <p><strong>Użyj komendy <code>gh-deploy</code>:</strong> Ta komenda zbuduje Twoją stronę i automatycznie umieści ją na gałęzi <code>gh-pages</code> w Twoim zdalnym repozytorium.</p>
-<p><code>bash
-mkdocs gh-deploy</code></p>
+<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>gh-deploy
+</code></pre></div>
 <p>Podczas wykonywania polecenia MkDocs zbuduje dokumentację, utworzy gałąź <code>gh-pages</code> (jeśli nie istnieje), zatwierdzi zmiany i wypchnie je do zdalnego repozytorium <code>origin</code>.</p>
 </li>
 </ol>
@@ -662,7 +662,7 @@ mkdocs gh-deploy</code></p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["mermaid"], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>

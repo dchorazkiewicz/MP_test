@@ -10,6 +10,12 @@ nav:
   - 'Rzut ukośny': 'rzut_ukosny.md'
   - 'Topologia i Metryki': 'metryki_topologia.md'
   - 'Rysowanie Grafik': 'rysowanie_grafik.md'
+  - 'Demo': 'demo.md'
+  - 'Animacja 2': 'anim_2.html'
+  - 'Dyfrakcja': 'dyfrakcja.html'
+  - 'Siła Lorentza': 'sila_lotentza.html'
+  - 'Sprężystość': 'sprezyny.html'
+
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true

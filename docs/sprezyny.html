@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprzężone Oscylatory Harmoniczne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        canvas { display: block; }
+        .slider-thumb::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; cursor: pointer; }
+        .chart-container { position: relative; height: 200px; width: 100%; }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-700 p-4 shadow-md z-10">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i data-lucide="activity" class="text-blue-500 w-6 h-6"></i>
+                <h1 class="text-xl font-bold text-slate-100">Sprzężone Oscylatory Harmoniczne</h1>
+            </div>
+            <div class="text-xs text-slate-400 font-mono hidden sm:block">
+                $M \ddot{x} + C \dot{x} + K x = 0$
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col lg:flex-row h-full overflow-hidden">
+        
+        <!-- Simulation View -->
+        <section class="flex-grow flex flex-col relative bg-slate-950">
+            <!-- Canvas Container -->
+            <div class="flex-grow relative border-b border-slate-800" id="sim-container">
+                <canvas id="simCanvas" class="w-full h-full"></canvas>
+                
+                <!-- Overlay Info -->
+                <div class="absolute top-4 left-4 text-xs font-mono text-slate-500 pointer-events-none">
+                    t = <span id="time-display">0.00</span> s
+                </div>
+            </div>
+
+            <!-- Real-time Graph -->
+            <div class="h-1/3 bg-slate-900 p-4 border-t border-slate-800 flex flex-col">
+                <h3 class="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide">Wychylenie od położenia równowagi</h3>
+                <div class="chart-container flex-grow">
+                    <canvas id="chartCanvas"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar Controls -->
+        <aside class="w-full lg:w-80 bg-slate-900 border-l border-slate-700 p-6 flex flex-col gap-6 overflow-y-auto z-10 shadow-xl">
+            
+            <!-- Simulation Controls -->
+            <div>
+                <h3 class="text-sm font-semibold text-blue-400 mb-4 flex items-center gap-2">
+                    <i data-lucide="settings" class="w-4 h-4"></i> Konfiguracja Układu
+                </h3>
+                
+                <div class="space-y-5">
+                    <!-- Mass Count -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-2">
+                            <span class="text-slate-300">Liczba mas ($N$)</span>
+                            <span id="val-n" class="font-mono text-blue-300">2</span>
+                        </div>
+                        <!-- Zmieniono max na 20 -->
+                        <input type="range" id="inp-n" min="1" max="20" step="1" value="2" class="w-full h-1 bg-slate-700 rounded-lg appearance-none slider-thumb">
+                    </div>
+
+                    <!-- Spring Stiffness -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-2">
+                            <span class="text-slate-300">Sztywność sprężyn ($k$)</span>
+                            <span id="val-k" class="font-mono text-blue-300">1.0</span>
+                        </div>
+                        <input type="range" id="inp-k" min="0.1" max="5.0" step="0.1" value="1.0" class="w-full h-1 bg-slate-700 rounded-lg appearance-none slider-thumb">
+                    </div>
+
+                    <!-- Damping -->
+                    <div>
+                        <div class="flex justify-between text-xs mb-2">
+                            <span class="text-slate-300">Tłumienie ($c$)</span>
+                            <span id="val-c" class="font-mono text-blue-300">0.005</span>
+                        </div>
+                        <input type="range" id="inp-c" min="0" max="0.05" step="0.001" value="0.005" class="w-full h-1 bg-slate-700 rounded-lg appearance-none slider-thumb">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Presets (Initial Conditions) -->
+            <div>
+                <h3 class="text-sm font-semibold text-blue-400 mb-4 flex items-center gap-2">
+                    <i data-lucide="play-circle" class="w-4 h-4"></i> Warunki Początkowe
+                </h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setMode('sym')" class="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded text-slate-300 transition text-left">
+                        Mod Symetryczny <br><span class="text-[10px] text-slate-500">$\uparrow \uparrow$</span>
+                    </button>
+                    <button onclick="setMode('antisym')" class="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded text-slate-300 transition text-left">
+                        Mod Antysym. <br><span class="text-[10px] text-slate-500">$\uparrow \downarrow$</span>
+                    </button>
+                    <button onclick="setMode('plucked')" class="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded text-slate-300 transition col-span-2">
+                        Pojedyncze wychylenie <span class="text-[10px] text-slate-500">(Dudnienia / Propagacja)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-auto flex gap-2 pt-4 border-t border-slate-800">
+                <button id="btn-toggle" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded transition flex justify-center items-center gap-2">
+                    <i data-lucide="pause" class="w-4 h-4"></i> Pauza
+                </button>
+                <button id="btn-reset" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 rounded transition">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Configuration ---
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const chartCtx = document.getElementById('chartCanvas').getContext('2d');
+        const container = document.getElementById('sim-container');
+
+        const colors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7'];
+
+        // --- Physics State ---
+        let params = {
+            N: 2,
+            k: 1.0,     // Reduced stiffness
+            m: 2.0,     // Increased mass
+            c: 0.005,   // Reduced damping
+            restLength: 0 
+        };
+
+        let state = {
+            masses: [], // { x, v, a, color }
+            t: 0,
+            running: true
+        };
+
+        // --- Chart Setup ---
+        let chartData = {
+            labels: [],
+            datasets: []
+        };
+
+        const chart = new Chart(chartCtx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                interaction: { intersect: false },
+                elements: { point: { radius: 0 }, line: { borderWidth: 1.5 } }, // Cieńsze linie dla większej liczby mas
+                scales: {
+                    x: { display: false, grid: { display: false } },
+                    y: { 
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' },
+                        suggestedMin: -100,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const MAX_DATA_POINTS = 300;
+        let frameCount = 0;
+
+        // --- Initialization ---
+
+        function initSystem(mode = 'sym') {
+            state.t = 0;
+            state.masses = [];
+            
+            // Calculate spacing
+            const width = canvas.width;
+            const wallMargin = 50;
+            const totalSpace = width - 2 * wallMargin;
+            params.restLength = totalSpace / (params.N + 1);
+
+            for (let i = 0; i < params.N; i++) {
+                // Equilibrium position
+                const eqX = wallMargin + (i + 1) * params.restLength;
+                
+                let startDisplacement = 0;
+
+                // Initial conditions based on mode
+                if (mode === 'sym') {
+                    startDisplacement = 50; 
+                } else if (mode === 'antisym') {
+                    startDisplacement = (i % 2 === 0) ? 50 : -50;
+                } else if (mode === 'plucked') {
+                    startDisplacement = (i === 0) ? 80 : 0;
+                }
+
+                state.masses.push({
+                    x: eqX + startDisplacement,
+                    v: 0,
+                    a: 0,
+                    eqX: eqX, 
+                    color: colors[i % colors.length]
+                });
+            }
+
+            // Reset Chart
+            chartData.labels = new Array(MAX_DATA_POINTS).fill(0);
+            chartData.datasets = state.masses.map((m, i) => ({
+                label: `M${i+1}`,
+                data: new Array(MAX_DATA_POINTS).fill(0),
+                borderColor: m.color,
+                borderWidth: params.N > 10 ? 1 : 2, // Cieńsze linie przy dużej ilości
+                tension: 0.4
+            }));
+            chart.update();
+        }
+
+        // --- Physics Loop ---
+
+        function updatePhysics(dt) {
+            const N = params.N;
+            const k = params.k;
+            const m = params.m;
+            const c = params.c;
+            const wallMargin = 50;
+
+            // Calculate Forces
+            for (let i = 0; i < N; i++) {
+                let force = 0;
+                const currentPos = state.masses[i].x;
+                const velocity = state.masses[i].v;
+
+                // Left spring
+                let leftPos = (i === 0) ? wallMargin : state.masses[i-1].x;
+                let leftStretch = (currentPos - leftPos) - params.restLength;
+                force -= k * leftStretch; // Hooke's Law
+
+                // Right spring
+                let rightPos = (i === N - 1) ? (canvas.width - wallMargin) : state.masses[i+1].x;
+                let rightStretch = (rightPos - currentPos) - params.restLength;
+                force += k * rightStretch;
+
+                // Damping
+                force -= c * velocity * 5; 
+
+                // F = ma
+                state.masses[i].a = force / m;
+            }
+
+            // Integration (Symplectic Euler)
+            for (let i = 0; i < N; i++) {
+                state.masses[i].v += state.masses[i].a * dt;
+                state.masses[i].x += state.masses[i].v * dt;
+            }
+
+            state.t += dt;
+        }
+
+        // --- Rendering ---
+
+        function drawSpring(x1, x2, isWall = false) {
+            // Dynamic segments based on length to keep look consistent
+            const dist = Math.abs(x2 - x1);
+            const segments = Math.max(5, Math.floor(dist / 10)); // Min 5 segments
+            const deltaX = (x2 - x1) / segments;
+            const yBase = canvas.height / 2;
+            // Amplitude scales down if very crowded
+            const amp = Math.min(10, params.restLength * 0.2); 
+
+            ctx.beginPath();
+            ctx.moveTo(x1, yBase);
+            
+            for (let i = 1; i < segments; i++) {
+                const x = x1 + i * deltaX;
+                const y = yBase + ((i % 2 === 0) ? amp : -amp);
+                ctx.lineTo(x, y);
+            }
+            
+            ctx.lineTo(x2, yBase);
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Wall drawing
+            if (isWall) {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x1 - 5, yBase - 40, 10, 80);
+            }
+        }
+
+        function draw() {
+            // Clear
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const yBase = canvas.height / 2;
+
+            // Draw Walls
+            const wallMargin = 50;
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(wallMargin - 10, yBase - 50, 10, 100);
+            ctx.fillRect(canvas.width - wallMargin, yBase - 50, 10, 100);
+
+            // Dynamic Radius Calculation
+            // Base radius 15, scale down if space is tight
+            // Available space per unit is restLength. We want some gap.
+            // Let's take 40% of restLength as radius (so 80% diameter -> small gap)
+            // But max 15px.
+            const calculatedRadius = Math.min(15, params.restLength * 0.4);
+            const radius = Math.max(3, calculatedRadius); // Minimum 3px visible
+
+            // Draw Springs and Masses
+            let prevX = wallMargin;
+            
+            for (let i = 0; i < state.masses.length; i++) {
+                const mass = state.masses[i];
+                
+                // Spring to left (connects to edge of ball)
+                drawSpring(prevX, mass.x - radius); 
+
+                // Mass
+                ctx.beginPath();
+                ctx.arc(mass.x, yBase, radius, 0, Math.PI * 2);
+                ctx.fillStyle = mass.color;
+                
+                // Shadow
+                ctx.shadowColor = mass.color;
+                ctx.shadowBlur = radius * 0.6;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Label (only if radius allows)
+                if (radius > 8) {
+                    ctx.fillStyle = '#fff';
+                    ctx.font = `${Math.floor(radius * 0.8)}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    // Show number if not too many
+                    if (state.masses.length <= 10) {
+                       ctx.fillText(i+1, mass.x, yBase + radius * 0.3);
+                    }
+                }
+
+                prevX = mass.x + radius;
+            }
+
+            // Final spring to right wall
+            drawSpring(prevX, canvas.width - wallMargin);
+        }
+
+        function updateChart() {
+            // Shift array
+            for(let ds of chartData.datasets) {
+                ds.data.shift();
+            }
+
+            // Push new data
+            state.masses.forEach((m, i) => {
+                chartData.datasets[i].data.push(m.x - m.eqX);
+            });
+
+            chart.update('none'); 
+        }
+
+        // --- Main Loop ---
+
+        function resize() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            // Recalculate equilibrium positions if running
+            initSystem('sym');
+        }
+
+        function loop() {
+            if (state.running) {
+                for (let k = 0; k < 10; k++) {
+                    updatePhysics(0.015); 
+                }
+                
+                document.getElementById('time-display').innerText = state.t.toFixed(2);
+                
+                frameCount++;
+                if (frameCount % 3 === 0) { 
+                    updateChart();
+                }
+            }
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        // --- Event Listeners ---
+        window.addEventListener('resize', resize);
+        
+        // Inputs
+        const ui = {
+            n: document.getElementById('inp-n'),
+            k: document.getElementById('inp-k'),
+            c: document.getElementById('inp-c'),
+            btnToggle: document.getElementById('btn-toggle'),
+            btnReset: document.getElementById('btn-reset'),
+            labels: {
+                n: document.getElementById('val-n'),
+                k: document.getElementById('val-k'),
+                c: document.getElementById('val-c')
+            }
+        };
+
+        ui.n.addEventListener('input', (e) => {
+            params.N = parseInt(e.target.value);
+            ui.labels.n.innerText = params.N;
+            initSystem('sym');
+        });
+
+        ui.k.addEventListener('input', (e) => {
+            params.k = parseFloat(e.target.value);
+            ui.labels.k.innerText = params.k;
+        });
+
+        ui.c.addEventListener('input', (e) => {
+            params.c = parseFloat(e.target.value);
+            ui.labels.c.innerText = params.c;
+        });
+
+        ui.btnToggle.addEventListener('click', () => {
+            state.running = !state.running;
+            if (state.running) {
+                ui.btnToggle.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i> Pauza';
+            } else {
+                ui.btnToggle.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i> Start';
+            }
+            lucide.createIcons();
+        });
+
+        ui.btnReset.addEventListener('click', () => {
+            initSystem('sym');
+            state.running = true;
+            ui.btnToggle.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i> Pauza';
+            lucide.createIcons();
+        });
+
+        window.setMode = (mode) => {
+            initSystem(mode);
+        }
+
+        // Start
+        setTimeout(() => {
+            resize();
+            loop();
+        }, 100);
+
+    </script>
+</body>
+</html>

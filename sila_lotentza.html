@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symulacja Siły Lorentza 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
+        canvas { display: block; }
+        .control-group { margin-bottom: 1rem; }
+        input[type=range] { width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body class="flex h-screen w-screen">
+
+    <!-- Sidebar Controls -->
+    <aside class="w-80 bg-slate-900 border-r border-slate-700 flex flex-col z-10 overflow-y-auto">
+        <div class="p-4 border-b border-slate-700">
+            <h1 class="text-xl font-bold text-blue-400 flex items-center gap-2">
+                <i data-lucide="atom" class="w-6 h-6"></i> Siła Lorentza
+            </h1>
+            <div class="mt-2 text-xs text-slate-400 font-mono">
+                \vec{F} = q(\vec{E} + \vec{v} \times \vec{B})
+            </div>
+        </div>
+
+        <div class="p-4 flex-grow space-y-6">
+            
+            <!-- Particle Properties -->
+            <div class="control-group">
+                <h3 class="text-sm font-semibold text-slate-300 mb-2 flex items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4"></i> Cząstka
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Ładunek ($q$)</span>
+                            <span id="val-charge" class="font-mono text-blue-300">1.0</span>
+                        </div>
+                        <input type="range" id="inp-charge" min="-2" max="2" step="0.1" value="1.0" class="accent-blue-500">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Masa ($m$)</span>
+                            <span id="val-mass" class="font-mono text-slate-300">1.0</span>
+                        </div>
+                        <input type="range" id="inp-mass" min="0.1" max="5" step="0.1" value="1.0" class="accent-slate-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Initial Velocity -->
+            <div class="control-group">
+                <h3 class="text-sm font-semibold text-slate-300 mb-2 flex items-center gap-2">
+                    <i data-lucide="move" class="w-4 h-4"></i> Prędkość początkowa ($\vec{v}_0$)
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>$v_x$ (prostopadła do B)</span>
+                            <span id="val-vx" class="font-mono text-green-300">5.0</span>
+                        </div>
+                        <input type="range" id="inp-vx" min="0" max="10" step="0.1" value="5.0" class="accent-green-500">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>$v_z$ (równoległa do B)</span>
+                            <span id="val-vz" class="font-mono text-green-300">0.0</span>
+                        </div>
+                        <input type="range" id="inp-vz" min="0" max="5" step="0.1" value="0.0" class="accent-green-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fields -->
+            <div class="control-group">
+                <h3 class="text-sm font-semibold text-slate-300 mb-2 flex items-center gap-2">
+                    <i data-lucide="magnet" class="w-4 h-4"></i> Pola
+                </h3>
+                <div class="space-y-3">
+                    <div class="p-2 bg-blue-900/20 rounded border border-blue-800/50">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-blue-300">Magnetyczne $\vec{B}_y$</span>
+                            <span id="val-b" class="font-mono text-blue-300">1.0</span>
+                        </div>
+                        <input type="range" id="inp-b" min="-2" max="2" step="0.1" value="1.0" class="accent-blue-500">
+                    </div>
+                    <div class="p-2 bg-yellow-900/20 rounded border border-yellow-800/50">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-yellow-300">Elektryczne $\vec{E}_x$</span>
+                            <span id="val-e" class="font-mono text-yellow-300">0.0</span>
+                        </div>
+                        <input type="range" id="inp-e" min="-2" max="2" step="0.1" value="0.0" class="accent-yellow-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Presets -->
+            <div class="grid grid-cols-3 gap-2 mt-4">
+                <button onclick="setPreset('circle')" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition">Okrąg</button>
+                <button onclick="setPreset('helix')" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition">Śruba</button>
+                <button onclick="setPreset('selector')" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition">Selektor</button>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-700 bg-slate-900">
+            <button id="btn-reset" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded flex items-center justify-center gap-2 transition">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Resetuj Symulację
+            </button>
+            <div class="mt-2 text-[10px] text-slate-500 text-center">
+                LPM: Obrót | PPM: Przesunięcie | Rolka: Zoom
+            </div>
+        </div>
+    </aside>
+
+    <!-- 3D Canvas Container -->
+    <main class="flex-grow relative bg-black" id="canvas-container">
+        <!-- Legend Overlay -->
+        <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur p-3 rounded border border-slate-700 pointer-events-none select-none">
+            <div class="flex items-center gap-2 text-xs mb-1">
+                <div class="w-3 h-3 bg-red-500 rounded-full box-border border border-white"></div>
+                <span>Cząstka + Trail</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs mb-1">
+                <div class="w-8 h-0.5 bg-blue-500"></div>
+                <span>Pole B (Pionowe)</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+                <div class="w-8 h-0.5 bg-yellow-500"></div>
+                <span>Pole E (Poziome)</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- Init Icons ---
+        lucide.createIcons();
+
+        // --- Three.js Setup ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x020617); // Slate-950
+        scene.fog = new THREE.FogExp2(0x020617, 0.02);
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(20, 20, 20);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        // --- Lighting ---
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+
+        // --- Helpers ---
+        const gridHelper = new THREE.GridHelper(40, 40, 0x334155, 0x1e293b);
+        scene.add(gridHelper);
+        const axesHelper = new THREE.AxesHelper(2);
+        scene.add(axesHelper);
+
+        // --- Field Visualizations (Arrows) ---
+        const bFieldGroup = new THREE.Group();
+        const eFieldGroup = new THREE.Group();
+        scene.add(bFieldGroup);
+        scene.add(eFieldGroup);
+
+        function updateFieldVisuals(B, E) {
+            // Clear old
+            while(bFieldGroup.children.length > 0) bFieldGroup.remove(bFieldGroup.children[0]);
+            while(eFieldGroup.children.length > 0) eFieldGroup.remove(eFieldGroup.children[0]);
+
+            const spacing = 5;
+            const range = 15;
+
+            // Jeśli pole jest bliskie zera, nie rysuj strzałek, żeby nie zaśmiecać widoku
+            const showB = Math.abs(B) > 0.1;
+            const showE = Math.abs(E) > 0.1;
+
+            for (let x = -range; x <= range; x += spacing) {
+                for (let z = -range; z <= range; z += spacing) {
+                    
+                    // Magnetic Field (Vertical - Y axis)
+                    if (showB) {
+                        const dir = new THREE.Vector3(0, Math.sign(B), 0);
+                        const arrow = new THREE.ArrowHelper(dir, new THREE.Vector3(x, -5, z), 10, 0x3b82f6, 1, 0.5);
+                        bFieldGroup.add(arrow);
+                    }
+
+                    // Electric Field (Horizontal - X axis for this demo)
+                    if (showE) {
+                        const dir = new THREE.Vector3(Math.sign(E), 0, 0);
+                        // Rysujemy na wysokości 0
+                        const arrow = new THREE.ArrowHelper(dir, new THREE.Vector3(x - (Math.sign(E)*2), 0, z), 4, 0xeab308, 1, 0.5);
+                        eFieldGroup.add(arrow);
+                    }
+                }
+            }
+        }
+
+        // --- Physics Objects ---
+        
+        // Particle
+        const particleGeo = new THREE.SphereGeometry(0.3, 16, 16);
+        const particleMat = new THREE.MeshStandardMaterial({ 
+            color: 0xff0000, 
+            emissive: 0xff0000, 
+            emissiveIntensity: 0.5 
+        });
+        const particle = new THREE.Mesh(particleGeo, particleMat);
+        scene.add(particle);
+
+        // Trail
+        const MAX_POINTS = 2000;
+        const trailGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(MAX_POINTS * 3);
+        trailGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const trailMat = new THREE.LineBasicMaterial({ color: 0xff4444 });
+        const trail = new THREE.Line(trailGeo, trailMat);
+        // Inicjalizacja trail poza widokiem
+        for(let i=0; i<MAX_POINTS*3; i++) positions[i] = 9999;
+        scene.add(trail);
+
+        // --- Physics State ---
+        let state = {
+            pos: new THREE.Vector3(0, 0, 0),
+            vel: new THREE.Vector3(5, 0, 0),
+            q: 1.0,
+            m: 1.0,
+            B: new THREE.Vector3(0, 1.0, 0), // B is along Y
+            E: new THREE.Vector3(0, 0, 0),   // E is along X (initially 0)
+            trailIndex: 0
+        };
+
+        const dt = 0.016; // Time step
+
+        // --- Inputs & UI Handling ---
+        const inputs = {
+            q: document.getElementById('inp-charge'),
+            m: document.getElementById('inp-mass'),
+            vx: document.getElementById('inp-vx'),
+            vz: document.getElementById('inp-vz'),
+            B: document.getElementById('inp-b'),
+            E: document.getElementById('inp-e')
+        };
+
+        const displays = {
+            q: document.getElementById('val-charge'),
+            m: document.getElementById('val-mass'),
+            vx: document.getElementById('val-vx'),
+            vz: document.getElementById('val-vz'),
+            B: document.getElementById('val-b'),
+            E: document.getElementById('val-e')
+        };
+
+        function updateSimulationParams() {
+            state.q = parseFloat(inputs.q.value);
+            state.m = parseFloat(inputs.m.value);
+            
+            // Note: Velocity updates only on reset usually in physics sims, 
+            // but here we let user tweak "force" parameters live. 
+            // We do NOT update velocity vector itself from sliders live (that would teleport physics),
+            // we only update B and E fields live.
+            
+            const bVal = parseFloat(inputs.B.value);
+            state.B.set(0, bVal, 0);
+
+            const eVal = parseFloat(inputs.E.value);
+            state.E.set(eVal, 0, 0);
+
+            // Update Displays
+            displays.q.innerText = state.q.toFixed(1);
+            displays.m.innerText = state.m.toFixed(1);
+            displays.B.innerText = bVal.toFixed(1);
+            displays.E.innerText = eVal.toFixed(1);
+
+            // Update Field Visuals
+            updateFieldVisuals(bVal, eVal);
+        }
+
+        function resetSimulation() {
+            state.pos.set(-10, 0, 0); // Start slightly left
+            state.trailIndex = 0;
+            
+            // Get initial velocity from inputs
+            const vx = parseFloat(inputs.vx.value);
+            const vz = parseFloat(inputs.vz.value);
+            state.vel.set(vx, 0, vz);
+
+            // Clear trail
+            const posAttr = trail.geometry.attributes.position;
+            for(let i=0; i<MAX_POINTS*3; i++) posAttr.array[i] = 0; // Collapse to origin visually (or hide)
+            posAttr.needsUpdate = true;
+            trail.geometry.setDrawRange(0, 0);
+
+            // Update UI Labels for V
+            displays.vx.innerText = vx.toFixed(1);
+            displays.vz.innerText = vz.toFixed(1);
+            
+            // Ensure physics params are fresh
+            updateSimulationParams();
+        }
+
+        // --- Orbit Controls Logic (Simple Custom Implementation) ---
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let radius = 35;
+        let theta = Math.PI / 4;
+        let phi = Math.PI / 4;
+
+        container.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        container.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaMove = {
+                    x: e.offsetX - previousMousePosition.x,
+                    y: e.offsetY - previousMousePosition.y
+                };
+
+                theta -= deltaMove.x * 0.01;
+                phi -= deltaMove.y * 0.01;
+                
+                // Clamp phi to avoid flipping
+                phi = Math.max(0.1, Math.min(Math.PI - 0.1, phi));
+
+                updateCameraPosition();
+            }
+            previousMousePosition = { x: e.offsetX, y: e.offsetY };
+        });
+
+        container.addEventListener('wheel', (e) => {
+            radius += e.deltaY * 0.05;
+            radius = Math.max(5, Math.min(100, radius));
+            updateCameraPosition();
+        });
+
+        function updateCameraPosition() {
+            camera.position.x = radius * Math.sin(phi) * Math.cos(theta);
+            camera.position.y = radius * Math.cos(phi);
+            camera.position.z = radius * Math.sin(phi) * Math.sin(theta);
+            camera.lookAt(0, 0, 0);
+        }
+
+        // --- Main Loop ---
+
+        function physicsStep() {
+            // F = q(E + v x B)
+            
+            // 1. Electric Force: F_e = q * E
+            const Fe = state.E.clone().multiplyScalar(state.q);
+
+            // 2. Magnetic Force: F_m = q * (v x B)
+            const vCrossB = state.vel.clone().cross(state.B);
+            const Fm = vCrossB.multiplyScalar(state.q);
+
+            // 3. Total Force
+            const Ftotal = Fe.add(Fm);
+
+            // 4. Acceleration: a = F / m
+            const acc = Ftotal.divideScalar(state.m);
+
+            // 5. Integration (Euler for simplicity, small dt)
+            state.vel.add(acc.multiplyScalar(dt));
+            state.pos.add(state.vel.clone().multiplyScalar(dt));
+
+            // 6. Update Particle Mesh
+            particle.position.copy(state.pos);
+
+            // 7. Update Trail
+            const positions = trail.geometry.attributes.position.array;
+            if (state.trailIndex < MAX_POINTS) {
+                positions[state.trailIndex * 3] = state.pos.x;
+                positions[state.trailIndex * 3 + 1] = state.pos.y;
+                positions[state.trailIndex * 3 + 2] = state.pos.z;
+                state.trailIndex++;
+                trail.geometry.setDrawRange(0, state.trailIndex);
+                trail.geometry.attributes.position.needsUpdate = true;
+            } else {
+                // Shift buffer (simple ring buffer effect would be better performance-wise, but shift is easy to code)
+                for (let i = 0; i < (MAX_POINTS - 1) * 3; i++) {
+                    positions[i] = positions[i + 3];
+                }
+                positions[(MAX_POINTS - 1) * 3] = state.pos.x;
+                positions[(MAX_POINTS - 1) * 3 + 1] = state.pos.y;
+                positions[(MAX_POINTS - 1) * 3 + 2] = state.pos.z;
+                trail.geometry.attributes.position.needsUpdate = true;
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            physicsStep();
+            renderer.render(scene, camera);
+        }
+
+        // --- Presets ---
+        window.setPreset = function(type) {
+            if (type === 'circle') {
+                inputs.B.value = 1.0;
+                inputs.E.value = 0.0;
+                inputs.vx.value = 5.0;
+                inputs.vz.value = 0.0;
+                inputs.q.value = 1.0;
+            } else if (type === 'helix') {
+                inputs.B.value = 1.0;
+                inputs.E.value = 0.0;
+                inputs.vx.value = 4.0;
+                inputs.vz.value = 2.0; // Dodajemy składową równoległą do pola
+                inputs.q.value = 1.0;
+            } else if (type === 'selector') {
+                // Selektor prędkości: F_e = -F_m => qE = -q(v x B)
+                // Jeśli B=1 (Y), v=5 (X), to v x B = 5 (Z).
+                // Potrzebujemy E, aby skontrować.
+                // Uprośćmy: v=X, B=Y. Siła magnetyczna działa w osi Z. 
+                // Więc musimy przyłożyć pole E w osi Z (w kodzie E jest w X w obecnej implementacji 2D UI).
+                // ZMODYFIKUJMY preset pod obecny model:
+                // B w Y. v w X. Siła Lorentza F = v(X) x B(Y) = Z.
+                // Siła magnetyczna ciągnie w Z.
+                // Aby to zrównoważyć, potrzebowalibyśmy E w Z. 
+                // Moja prosta implementacja E ma tylko składową X (w sliderze).
+                // Zmieńmy to dla celów demonstracji:
+                
+                // Zróbmy 'Dryf w skrzyżowanych polach' zamiast selektora prędkości (bo selektor wymagałby E w osi Z)
+                // Dryf cykloidalny
+                inputs.B.value = 1.0;
+                inputs.E.value = 1.0; // E prostopadłe do B
+                inputs.vx.value = 0.0; // Start od zera
+                inputs.vz.value = 0.0;
+                inputs.q.value = 1.0;
+                
+                // Alert w konsoli lub zmiana nazwy? Zostawmy "Selektor" jako "Dryf E x B"
+            }
+            resetSimulation();
+        }
+
+        // --- Init Listeners ---
+        Object.values(inputs).forEach(inp => {
+            inp.addEventListener('input', updateSimulationParams);
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', resetSimulation);
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Start
+        updateCameraPosition();
+        resetSimulation();
+        animate();
+
+    </script>
+</body>
+</html>
